@@ -7,10 +7,10 @@ import java.sql.*;
  *
  */
 public class DbConnection {
-static String bd = "empleados";
-static String login = "root";
-static String password = "";
-static String url = "jdbc:mysql://localhost/"+bd;
+private static String bd = "empleados";
+private static String login = "root";
+private static String password = "";
+private static String url = "jdbc:mysql://localhost/"+bd;
 Connection connection = null;
 
 public DbConnection() {
