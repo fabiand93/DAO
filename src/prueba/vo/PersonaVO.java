@@ -22,8 +22,8 @@ public Integer getIdPersona() {
 /**
   * @param idPersona the idPersona to set
   */
-public void setIdPersona(Integer idPersona) {
-	this.idPersona = idPersona;
+public void setIdPersona(int i) {
+	this.idPersona = i;
 }
 /**
   * @return the nombrePersona

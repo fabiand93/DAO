@@ -1,8 +1,15 @@
 package prueba.principal;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
+
 import prueba.dao.PersonaDAO;
+import prueba.dao.PersonaData;
 import prueba.vo.PersonaVO;
 /**
  * Clase main que inicia el menu para ejecutar el programa de creacion
@@ -14,15 +21,19 @@ import prueba.vo.PersonaVO;
 public class Principal {
 
 PersonaDAO miPersonaDAO;
+PersonaData miPersonaData;
 
 /**
   * Método principal, hace el llamado al menú donde se
   * presentan todas las opciones del sistema
   * @param args
-  */
-public static void main(String[] args) {
+  
+ * @throws Exception */
+public static void main(String[] args) throws Exception {
 	Principal miPrincipal = new Principal();
 	miPrincipal.verMenu();
+	//miPrincipal.agregarEmpleado();
+	//miPrincipal.modoOperacion();
 	}
 
 /**
@@ -30,6 +41,37 @@ public static void main(String[] args) {
   * solicita el ingreso de un numero y se envia a su 
   * correspondiente proceso
   */
+
+//Hacia donde se usa
+private void modoOperacion(){
+	miPersonaData = new PersonaData();
+	miPersonaDAO = new PersonaDAO();
+	try{
+		File f=new File("Data/ManejoDatos.txt");
+		if(f.exists()){
+			FileReader fr=new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			String linea;
+			String[] vamos;
+			
+			while ((linea=br.readLine())!=null){
+				System.out.println(linea);
+				if((linea=br.readLine()) != null){
+					System.out.println("uno");
+				}
+				else
+					if(linea=="2"){
+						System.out.println("DB");
+					}
+			}
+				
+		}
+}
+	catch (Exception e){
+		System.out.println(e);
+	}
+}
+
 private void verMenu() {
 
 	String textoMenu="Menú Principal\n\n";
@@ -52,7 +94,6 @@ try {
 		verMenu();
 		}
 }
-
 /**
   * Permite determinar que accion ejecutar dependiendo del parametro de 
   * ingreso correspondiente a las opciones del sistema
@@ -61,7 +102,6 @@ try {
 private void defineSeleccion(int seleccion) {
 
 	System.out.println("Selecciona "+seleccion);
-
 	switch (seleccion) {
 	case 1:
 		registrarPersona();
@@ -87,7 +127,6 @@ private void defineSeleccion(int seleccion) {
 		break;
 		}
 }
-
 /**
   * Permite solicitar los datos de la persona a registrar, se solicitan mediante
   * una ventana de ingreso y se almacenan en un arreglo con toda la informacion usando
@@ -98,9 +137,7 @@ private void defineSeleccion(int seleccion) {
 private void registrarPersona() {
 	miPersonaDAO = new PersonaDAO();
 	PersonaVO miPersona=new PersonaVO();
-	
 	String mensajeIngreso="Ingrese\n\n";
-
 	String datosSolicitados[] = {"Documento : ","Nombre : ",
 			"Edad: ","Profesión: ","Telefono: "};
 	String datosPersona[] = new String[5];
@@ -108,10 +145,8 @@ private void registrarPersona() {
 		//solicita el ingreso del dato y se almacena en el arreglo de datosPersona
 		datosPersona[i]=JOptionPane.showInputDialog(null, mensajeIngreso+
 				datosSolicitados[i],"Datos Persona",JOptionPane.INFORMATION_MESSAGE);
-
 		System.out.println(datosSolicitados[i]+datosPersona[i]);
 	}
-
 	miPersona.setIdPersona(Integer.parseInt(datosPersona[0]));
 	miPersona.setNombrePersona(datosPersona[1]);
 	miPersona.setEdadPersona(Integer.parseInt(datosPersona[2]));
@@ -119,7 +154,6 @@ private void registrarPersona() {
 	miPersona.setTelefonoPersona(Integer.parseInt(datosPersona[4]));
 	miPersonaDAO.registrarPersona(miPersona);
 }
-
 /**
   * Permite obtener la lista de personas almacenada en la tabla persona
   * si la lista se encuentra vacia quiere decir que no hay personas registradas
@@ -151,9 +185,7 @@ if (listaPersonas.size()>0) {
 	JOptionPane.showMessageDialog(null,"Actualmente no " +
 			"existen registros de personas","INFORMACIÓN",JOptionPane.INFORMATION_MESSAGE);
 	}
-
 }
-
 /**
   * Permite la consulta de una persona en especifico mediante el envio de
   * su documento de identidad como parametro, en caso de que no se retorne
@@ -182,5 +214,10 @@ private void buscarPersona(int documento) {
 	JOptionPane.showMessageDialog(null,"El documento ingresado " +
 			"no corresponde a ninguna persona","INFORMACIÓN",JOptionPane.INFORMATION_MESSAGE);
 	}
+}
+private void agregarEmpleado() throws Exception{
+	miPersonaData = new PersonaData();
+	PersonaVO miPersona = new PersonaVO();
+	miPersonaData.escribirEmpleado(miPersona);
 }
 }
