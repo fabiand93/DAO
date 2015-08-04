@@ -3,13 +3,11 @@ package prueba.principal;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
 import prueba.dao.PersonaDAO;
-import prueba.dao.PersonaData;
 import prueba.vo.PersonaVO;
 /**
  * Clase main que inicia el menu para ejecutar el programa de creacion
@@ -21,7 +19,6 @@ import prueba.vo.PersonaVO;
 public class Principal {
 
 PersonaDAO miPersonaDAO;
-PersonaData miPersonaData;
 
 /**
   * Método principal, hace el llamado al menú donde se
@@ -31,9 +28,9 @@ PersonaData miPersonaData;
  * @throws Exception */
 public static void main(String[] args) throws Exception {
 	Principal miPrincipal = new Principal();
-	miPrincipal.verMenu();
+	//miPrincipal.verMenu();
 	//miPrincipal.agregarEmpleado();
-	//miPrincipal.modoOperacion();
+	miPrincipal.modoOperacion();
 	}
 
 /**
@@ -43,26 +40,28 @@ public static void main(String[] args) throws Exception {
   */
 
 //Hacia donde se usa
+@SuppressWarnings({ "resource", "unused" })
 private void modoOperacion(){
-	miPersonaData = new PersonaData();
 	miPersonaDAO = new PersonaDAO();
 	try{
 		File f=new File("Data/ManejoDatos.txt");
 		if(f.exists()){
-			FileReader fr=new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			String linea;
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			String linea = null;
 			String[] vamos;
-			
+			Principal nuevo = new Principal();
 			while ((linea=br.readLine())!=null){
 				System.out.println(linea);
-				if((linea=br.readLine()) != null){
-					System.out.println("uno");
+				if(linea.equals("1")){
+					System.out.println("archivos");
 				}
 				else
-					if(linea=="2"){
+					if(linea.equals("2")){
 						System.out.println("DB");
+						nuevo.verMenu();
 					}
+					else
+						System.out.println("no entro nada");
 			}
 				
 		}
@@ -196,7 +195,7 @@ if (listaPersonas.size()>0) {
 private void buscarPersona(int documento) {
 	miPersonaDAO = new PersonaDAO();
 	PersonaVO miPersona;
-	ArrayList< PersonaVO> personasEncontrada = miPersonaDAO.consultarPersona(documento);
+	ArrayList<PersonaVO> personasEncontrada = miPersonaDAO.consultarPersona(documento);
 //se valida que se encuentre la persona
 	if (personasEncontrada.size()>0) {
 		//se recorre la lista y se asignan los datos al objeto para imprimir los valores
@@ -214,10 +213,5 @@ private void buscarPersona(int documento) {
 	JOptionPane.showMessageDialog(null,"El documento ingresado " +
 			"no corresponde a ninguna persona","INFORMACIÓN",JOptionPane.INFORMATION_MESSAGE);
 	}
-}
-private void agregarEmpleado() throws Exception{
-	miPersonaData = new PersonaData();
-	PersonaVO miPersona = new PersonaVO();
-	miPersonaData.escribirEmpleado(miPersona);
 }
 }
